@@ -1,0 +1,26 @@
+[
+  {
+    "Serial Number": "1",
+    "Province": "Bagmati",
+    "District": "Kathmandu",
+    "Section": "Ring Road",
+    "Highway/Bridge Name": "Ring Road",
+    "Cause": "Maintenance",
+    "Status": "Blocked",
+    "Contact Name": "Mr. Ram",
+    "Contact Number / Designation": "+977-1-234567 / Engineer",
+    "OtherColumn": "..."
+  },
+  {
+    "Serial Number": "2",
+    "Province": "Bagmati",
+    "District": "Lalitpur",
+    "Section": "Lagankhel",
+    "Highway/Bridge Name": "Lagankhel Road",
+    "Cause": "Accident",
+    "Status": "One-Lane",
+    "Contact Name": "Ms. Sita",
+    "Contact Number / Designation": "+977-1-987654 / Officer",
+    "OtherColumn": "..."
+  }
+]

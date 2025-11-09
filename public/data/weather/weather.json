@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "location": "Kathmandu",
+    "temp": 25,
+    "condition": "Sunny"
+  },
+  {
+    "id": 2,
+    "location": "Pokhara",
+    "temp": 22,
+    "condition": "Cloudy"
+  }
+]

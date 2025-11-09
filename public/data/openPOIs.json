@@ -1,0 +1,137 @@
+[
+  {
+    "name": "Pashupatinath Temple",
+    "coordinate": [27.7106, 85.3489],
+    "category": "religious",
+    "type": "temple",
+    "icon": "temple.png",
+    "rating": 4.8,
+    "address": "Pashupati Nath Road, Kathmandu 44600"
+  },
+  {
+    "name": "Boudhanath Stupa",
+    "coordinate": [27.7215, 85.3622],
+    "category": "religious",
+    "type": "temple",
+    "icon": "temple.png",
+    "rating": 4.7,
+    "address": "Boudha, Kathmandu 44600"
+  },
+  {
+    "name": "Tribhuvan International Airport",
+    "coordinate": [27.6966, 85.3591],
+    "category": "transport",
+    "type": "airport",
+    "icon": "airport.png",
+    "rating": 3.5,
+    "address": "Airport Marg, Kathmandu 44600"
+  },
+  {
+    "name": "Swayambhunath Stupa",
+    "coordinate": [27.7149, 85.2906],
+    "category": "religious",
+    "type": "temple",
+    "icon": "temple.png",
+    "rating": 4.6,
+    "address": "Swayambu, Kathmandu"
+  },
+  {
+    "name": "Kathmandu Durbar Square",
+    "coordinate": [27.7045, 85.3077],
+    "category": "heritage",
+    "type": "heritage",
+    "icon": "heritage.png",
+    "rating": 4.5,
+    "address": "Basantapur, Kathmandu"
+  },
+  {
+    "name": "Garden of Dreams",
+    "coordinate": [27.7143, 85.3161],
+    "category": "recreation",
+    "type": "park",
+    "icon": "park.png",
+    "rating": 4.4,
+    "address": "Tridevi Marg, Kathmandu"
+  },
+  {
+    "name": "Thamel",
+    "coordinate": [27.7154, 85.3125],
+    "category": "shopping",
+    "type": "shopping",
+    "icon": "shopping.png",
+    "rating": 4.3,
+    "address": "Thamel, Kathmandu"
+  },
+  {
+    "name": "Phewa Lake",
+    "coordinate": [28.2096, 83.9590],
+    "category": "recreation",
+    "type": "park",
+    "icon": "park.png",
+    "rating": 4.9,
+    "address": "Pokhara"
+  },
+  {
+    "name": "Lumbini",
+    "coordinate": [27.4678, 83.2757],
+    "category": "heritage",
+    "type": "heritage",
+    "icon": "heritage.png",
+    "rating": 4.8,
+    "address": "Lumbini Development Trust, Rupandehi"
+  },
+  {
+    "name": "Chitwan National Park",
+    "coordinate": [27.5291, 84.3542],
+    "category": "recreation",
+    "type": "park",
+    "icon": "park.png",
+    "rating": 4.7,
+    "address": "Chitwan"
+  },
+  {
+    "name": "Pokhara Airport",
+    "coordinate": [28.2009, 83.9821],
+    "category": "transport",
+    "type": "airport",
+    "icon": "airport.png",
+    "rating": 4.0,
+    "address": "Pokhara"
+  },
+  {
+    "name": "Patan Durbar Square",
+    "coordinate": [27.6726, 85.3259],
+    "category": "heritage",
+    "type": "heritage",
+    "icon": "heritage.png",
+    "rating": 4.6,
+    "address": "Mangal Bazaar, Lalitpur"
+  },
+  {
+    "name": "Bhaktapur Durbar Square",
+    "coordinate": [27.6722, 85.4298],
+    "category": "heritage",
+    "type": "heritage",
+    "icon": "heritage.png",
+    "rating": 4.7,
+    "address": "Bhaktapur"
+  },
+  {
+    "name": "Nagarkot",
+    "coordinate": [27.7172, 85.5197],
+    "category": "recreation",
+    "type": "viewpoint",
+    "icon": "park.png",
+    "rating": 4.5,
+    "address": "Nagarkot, Bhaktapur"
+  },
+  {
+    "name": "Annapurna Base Camp",
+    "coordinate": [28.5293, 83.8731],
+    "category": "trekking",
+    "type": "trekking",
+    "icon": "trekking.png",
+    "rating": 5.0,
+    "address": "Annapurna Conservation Area"
+  }
+]

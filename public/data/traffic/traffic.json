@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "highway": "H01",
+    "status": "Blocked"
+  },
+  {
+    "id": 2,
+    "highway": "H02",
+    "status": "Open"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Page 1",
+    "image": "page1.png"
+  },
+  {
+    "id": 2,
+    "title": "Page 2",
+    "image": "page2.png"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "ERROR_FETCH_ROAD": "Unable to fetch road status",
+  "MAP_CLICK_DISTANCE": "Click on the map to measure distance",
+  "VOICE_NOT_SUPPORTED": "Voice input is not supported in your browser",
+  "ERROR_FETCH_POIS": "Unable to fetch nearby places",
+  "DISTANCE_CALCULATOR_ERROR": "Distance calculation failed",
+  "GEMINI_RESPONSE_ERROR": "AI assistant did not return a response",
+  "WEATHER_FETCH_ERROR": "Unable to fetch weather information",
+  "UNKNOWN_ERROR": "An unknown error occurred",
+  "FORM_VALIDATION_ERROR": "Please fill all required fields"
+}
