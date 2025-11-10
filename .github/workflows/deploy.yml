@@ -19,21 +19,13 @@ jobs:
       VITE_DEFAULT_MAP_STYLE: light
       VITE_ENABLE_3D_MODE: true
 
-      # Load secrets from GitHub → Firebase / APIs / Gemini / Sheets / etc.
-      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      # Secrets / API keys
       VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-      VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
-
       VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
       VITE_WAZE_FEED_URL: ${{ secrets.VITE_WAZE_FEED_URL }}
       VITE_GAS_URL: ${{ secrets.VITE_GAS_URL }}
       VITE_SHEET_ID: ${{ secrets.VITE_SHEET_ID }}
-      LANG_TAB: ${{ secrets.LANG_TAB }}
       VITE_OPENWEATHERMAP_API_KEY: ${{ secrets.VITE_OPENWEATHERMAP_API_KEY }}
       VITE_DHM_API_KEY: ${{ secrets.VITE_DHM_API_KEY }}
       VITE_OPEN_METRO_API_KEY: ${{ secrets.VITE_OPEN_METRO_API_KEY }}
@@ -64,32 +56,32 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      # 3️⃣ Install dependencies (safe mode)
-      - name: 📦 Install Dependencies
+      # 3️⃣ Install dependencies
+      - name: 📦 Install dependencies
         run: |
           npm ci || npm install
           npm install -g ts-node
 
-      # 4️⃣ Generate JSON and i18n data automatically
-      - name: 🔄 Generate JSON Data & i18n Files
+      # 4️⃣ Generate JSON & i18n files
+      - name: 🔄 Generate JSON & i18n
         run: |
-          echo "Generating JSON and i18n data..."
+          echo "Generating JSON & i18n data..."
           mkdir -p ./public/data ./public/i18n
-          ts-node --esm src/helpers/generate-data-json.ts || echo "Skipping data JSON generation"
-          ts-node --esm src/helpers/generate-i18n-json.ts || echo "Skipping i18n generation"
+          ts-node --esm src/helpers/json/generate-data-json.ts || echo "Skipping data JSON generation"
+          ts-node --esm src/helpers/json/generate-i18n-json.ts || echo "Skipping i18n generation"
 
-      # 5️⃣ Build Vite App
-      - name: 🏗️ Build Application
+      # 5️⃣ Build Vite app
+      - name: 🏗️ Build Vite Application
         run: npm run build
 
       # 6️⃣ Deploy to Firebase Hosting
-      - name: 🔥 Deploy to Firebase
-        uses: w9jds/firebase-action@v12
+      - name: 🔥 Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SADAKSATHI }}
+          channelId: live
+          projectId: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
 
       # 7️⃣ Email notification on success
       - name: 📧 Notify Deployment Success
