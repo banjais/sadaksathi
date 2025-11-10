@@ -84,7 +84,7 @@ jobs:
 
       # 6️⃣ Deploy to Firebase Hosting
       - name: 🔥 Deploy to Firebase
-        uses: w9jds/firebase-action@v13
+        uses: w9jds/firebase-action@v12
         with:
           args: deploy --only hosting
         env:
