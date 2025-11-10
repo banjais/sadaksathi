@@ -4,7 +4,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react({
@@ -26,7 +25,12 @@ export default defineConfig({
         icons: [
           { src: "icons/pwa-192x192.png", sizes: "192x192", type: "image/png" },
           { src: "icons/pwa-512x512.png", sizes: "512x512", type: "image/png" },
-          { src: "icons/pwa-maskable.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+          {
+            src: "icons/pwa-maskable.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
         ],
       },
       workbox: {
@@ -75,26 +79,6 @@ export default defineConfig({
     target: "esnext",
     outDir: "dist",
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom")) return "vendor_react";
-            if (id.includes("leaflet") || id.includes("leaflet.markercluster")) return "vendor_leaflet";
-            if (id.includes("maplibre-gl")) return "vendor_maplibre";
-            if (id.includes("turn.js")) return "vendor_turnjs";
-            if (id.includes("file-saver")) return "vendor_filesaver";
-            if (id.includes("@mapbox/mapbox-gl-draw")) return "vendor_mapbox_draw";
-            return "vendor_misc";
-          }
-        },
-      },
-    },
-  },
-  esbuild: {
-    jsxFactory: "React.createElement",
-    jsxFragment: "React.Fragment",
-    legalComments: "none",
   },
   optimizeDeps: {
     include: [
@@ -112,7 +96,7 @@ export default defineConfig({
       "@radix-ui/react-slot",
       "@radix-ui/react-dialog",
       "@radix-ui/react-dropdown-menu",
-      "class-variance-authority"
+      "class-variance-authority",
     ],
   },
   define: {

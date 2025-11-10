@@ -30,7 +30,7 @@ pnpm-debug.log*
 Thumbs.db
 
 # ======================================================
-# Firebase
+# Firebase / Service Account
 # ======================================================
 firebase-debug.log
 serviceAccountKey.json
@@ -49,5 +49,25 @@ serviceAccountKey.json
 *.tmp
 *.swp
 *.lock
-public/data/dor.geojson
 
+# ======================================================
+# Local data files (optional)
+# ======================================================
+public/data/dor.geojson
+public/data/bridge_flipbook.json
+public/data/road_flipbook.json
+public/data/userReported_flipbook.json
+public/data/bridge.json
+public/data/road.json
+public/data/userReported.json
+
+# ======================================================
+# Coverage / Test reports
+# ======================================================
+coverage/
+*.lcov
+
+# ======================================================
+# Optional: TypeScript cache
+# ======================================================
+*.tsbuildinfo
