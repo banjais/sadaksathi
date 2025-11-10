@@ -19,13 +19,21 @@ jobs:
       VITE_DEFAULT_MAP_STYLE: light
       VITE_ENABLE_3D_MODE: true
 
-      # Secrets / API keys
+      # Firebase & API secrets
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
       VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+
       VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
       VITE_WAZE_FEED_URL: ${{ secrets.VITE_WAZE_FEED_URL }}
       VITE_GAS_URL: ${{ secrets.VITE_GAS_URL }}
       VITE_SHEET_ID: ${{ secrets.VITE_SHEET_ID }}
+      LANG_TAB: ${{ secrets.LANG_TAB }}
       VITE_OPENWEATHERMAP_API_KEY: ${{ secrets.VITE_OPENWEATHERMAP_API_KEY }}
       VITE_DHM_API_KEY: ${{ secrets.VITE_DHM_API_KEY }}
       VITE_OPEN_METRO_API_KEY: ${{ secrets.VITE_OPEN_METRO_API_KEY }}
@@ -40,7 +48,7 @@ jobs:
       VITE_APP_NAME: Sadak Sathi
       VITE_APP_DESCRIPTION: Your Smart Road Companion
 
-      # Output directories for JSON & translations
+      # Output directories
       VITE_I18N_OUTPUT_DIR: ./public/i18n
       VITE_JSON_OUTPUT_DIR: ./public/data
 
@@ -57,31 +65,31 @@ jobs:
           cache: "npm"
 
       # 3️⃣ Install dependencies
-      - name: 📦 Install dependencies
+      - name: 📦 Install Dependencies
         run: |
           npm ci || npm install
           npm install -g ts-node
 
       # 4️⃣ Generate JSON & i18n files
-      - name: 🔄 Generate JSON & i18n
+      - name: 🔄 Generate JSON Data & i18n Files
         run: |
-          echo "Generating JSON & i18n data..."
+          echo "Generating JSON and i18n data..."
           mkdir -p ./public/data ./public/i18n
           ts-node --esm src/helpers/json/generate-data-json.ts || echo "Skipping data JSON generation"
           ts-node --esm src/helpers/json/generate-i18n-json.ts || echo "Skipping i18n generation"
 
-      # 5️⃣ Build Vite app
-      - name: 🏗️ Build Vite Application
+      # 5️⃣ Build Vite App
+      - name: 🏗️ Build Application
         run: npm run build
 
       # 6️⃣ Deploy to Firebase Hosting
-      - name: 🔥 Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: 🔥 Deploy to Firebase
+        uses: w9jds/firebase-action@v13
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SADAKSATHI }}
-          channelId: live
-          projectId: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
 
       # 7️⃣ Email notification on success
       - name: 📧 Notify Deployment Success
@@ -90,11 +98,12 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{ secrets.NOTIFY_EMAIL_USER }}
-          password: ${{ secrets.NOTIFY_EMAIL_PASS }}
-          subject: ✅ Sadak-Sathi Deployment Successful
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ Sadak-Sathi Deployment Successful"
           to: banjays@gmail.com
-          from: "Sadak Sathi Bot <${{ secrets.NOTIFY_EMAIL_USER }}>"
+          from: "Sadak Sathi Bot <${{ secrets.EMAIL_USERNAME }}>"
           body: |
             Hello 👋,
             The Sadak-Sathi app was successfully deployed to Firebase Hosting!
@@ -109,11 +118,12 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{ secrets.NOTIFY_EMAIL_USER }}
-          password: ${{ secrets.NOTIFY_EMAIL_PASS }}
-          subject: ❌ Sadak-Sathi Deployment Failed
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ Sadak-Sathi Deployment Failed"
           to: banjays@gmail.com
-          from: "Sadak Sathi Bot <${{ secrets.NOTIFY_EMAIL_USER }}>"
+          from: "Sadak Sathi Bot <${{ secrets.EMAIL_USERNAME }}>"
           body: |
             Hello 👋,
             The Sadak-Sathi deployment has failed.
