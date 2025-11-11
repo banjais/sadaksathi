@@ -10,27 +10,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    name: Build & Deploy
+  lint-and-test:
+    name: Lint & Test
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [20.x]
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # 2️⃣ Set up Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
 
-      # 3️⃣ Install dependencies
-      - name: Install dependencies
-        run: npm ci
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
 
-      # 4️⃣ Create .env file from GitHub secrets
+      # 🔐 Create .env file from all secrets
       - name: Create .env file
         run: |
           echo "VITE_APP_NAME=${{ secrets.VITE_APP_NAME }}" >> .env
@@ -84,22 +95,87 @@ jobs:
           echo "VITE_TTS_ENGINE=${{ secrets.VITE_TTS_ENGINE }}" >> .env
           echo "VITE_SUPPORT_EMAIL=${{ secrets.VITE_SUPPORT_EMAIL }}" >> .env
 
-      # 5️⃣ Build project
-      - name: Build project
-        run: npm run build
+      - run: npm run build
 
-      # 6️⃣ Upload build artifacts (optional, only on successful build)
-      - name: Upload build artifacts
-        if: success()
-        uses: actions/upload-artifact@v4
+      # 📦 Upload build artifact for reuse
+      - uses: actions/upload-artifact@v4
         with:
           name: sadak-sathi-build
           path: dist/
 
-      # 7️⃣ Deploy to Firebase Hosting
-      - name: Deploy to Firebase Hosting
-        uses: w9jds/firebase-action@v2.2.0
+  deploy-preview:
+    name: Deploy Preview (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
         with:
-          args: deploy --only hosting
+          name: sadak-sathi-build
+      - uses: w9jds/firebase-action@v2.2.1
+        with:
+          args: deploy --only hosting:preview,functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Post PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            ✅ **Preview deployed successfully!**
+            🔗 [Open Preview](https://${{ secrets.VITE_FIREBASE_PROJECT_ID }}.web.app)
+
+  deploy-production:
+    name: Deploy Production (Hosting + Functions)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sadak-sathi-build
+      - uses: w9jds/firebase-action@v2.2.1
+        with:
+          args: deploy --only hosting,functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      # 📜 Generate Changelog
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          git fetch --prune --unshallow || true
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            git log -10 --pretty=format:"%h - %s (%an)" > changelog.txt
+          else
+            git log $LAST_TAG..HEAD --pretty=format:"%h - %s (%an)" > changelog.txt
+          fi
+          cat changelog.txt
+
+      # 📧 Send Deployment Notification Email
+      - name: Send Deployment Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🚀 Sadak-Sathi App Deployed Successfully"
+          to: ${{ secrets.EMAIL_TO }}
+          from: "Sadak-Sathi CI/CD Bot <${{ secrets.EMAIL_USERNAME }}>"
+          body: |
+            ✅ **Sadak-Sathi Deployment Completed**
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+
+            App URL: https://${{ secrets.VITE_FIREBASE_PROJECT_ID }}.web.app
+            Deployment Time: ${{ github.run_started_at }}
+
+            🔹 **Changelog (last commits):**
+            $(cat changelog.txt)
+
+            -- 
+            Sadak-Sathi DevOps Bot 🌍
