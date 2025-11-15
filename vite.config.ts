@@ -34,30 +34,41 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,png,json,svg}"],
+        globPatterns: ["**/*.{js,css,html,png,svg}"], // remove old JSON files
         runtimeCaching: [
+          // Cache external API calls (like weather or Gemini) but keep them fresh
           {
-            urlPattern: /^https?:\/\/.*/i,
+            urlPattern: /^https:\/\/api\.openweathermap\.org\/.*/i,
             handler: "NetworkFirst",
             options: {
-              cacheName: "network-cache",
-              expiration: { maxEntries: 200, maxAgeSeconds: 24 * 60 * 60 },
+              cacheName: "weather-api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 5 * 60, // cache only 5 minutes
+              },
             },
           },
           {
-            urlPattern: /^\/data\/.*\.json$/,
-            handler: "CacheFirst",
+            urlPattern: /^https:\/\/api\.gemini\.ai\/.*/i,
+            handler: "NetworkFirst",
             options: {
-              cacheName: "json-cache",
-              expiration: { maxEntries: 100, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheName: "gemini-api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 5 * 60,
+              },
             },
           },
+          // Optional: cache map tiles and static images
           {
-            urlPattern: /^\/data\/flipbook\/.*\.(png|jpg|jpeg)$/i,
+            urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|svg)$/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "flipbook-cache",
-              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 },
+              cacheName: "static-images-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
             },
           },
         ],
